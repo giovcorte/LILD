@@ -127,11 +127,11 @@ class ImageLoader {
             this.target = ImageTargetWrapper(view)
         }
 
-        fun intoView(view: ImageView?, placeHolder: Drawable) = apply {
+        fun intoView(view: ImageView?, placeHolder: Drawable?) = apply {
             this.target = ImageTargetWrapper(view, placeHolder)
         }
 
-        fun intoView(view: ImageView?, placeHolder: Drawable, errorPlaceHolder: Drawable) = apply {
+        fun intoView(view: ImageView?, placeHolder: Drawable?, errorPlaceHolder: Drawable?) = apply {
             this.target = ImageTargetWrapper(view, placeHolder, errorPlaceHolder)
         }
 
