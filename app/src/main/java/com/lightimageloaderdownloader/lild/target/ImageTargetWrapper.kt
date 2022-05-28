@@ -11,7 +11,8 @@ import java.lang.ref.WeakReference
 
 class ImageTargetWrapper(
     imageView: ImageView?,
-    private val placeHolder: Drawable? = null
+    private val placeHolder: Drawable? = null,
+    private val errorPlaceHolder: Drawable? = null
 ) : Target {
 
     private val view: Reference<ImageView> = WeakReference(imageView)
@@ -28,8 +29,8 @@ class ImageTargetWrapper(
     }
 
     override fun onError() {
-        placeHolder?.let {
-            getView()?.setImageDrawable(placeHolder)
+        errorPlaceHolder?.let {
+            getView()?.setImageDrawable(errorPlaceHolder)
         } ?: run {
             getView()?.visibility = View.GONE
         }

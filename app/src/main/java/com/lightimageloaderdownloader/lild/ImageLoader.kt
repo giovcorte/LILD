@@ -34,7 +34,7 @@ class ImageLoader {
         coroutineScope: CoroutineScope = CoroutineScope(Job() + Dispatchers.IO)
     ) {
         this.coroutineScope = coroutineScope
-        this.imageCache = ImageCache(application)
+        this.imageCache = ImageCache(application, DEFAULT_DISK_CACHE_SIZE, DEFAULT_APP_VERSION)
         this.urlFetcher = URLFetcher()
         this.fileFetcher=  FileFetcher()
         this.resourceFetcher = ResourceFetcher(application)
@@ -129,6 +129,10 @@ class ImageLoader {
 
         fun intoView(view: ImageView?, placeHolder: Drawable) = apply {
             this.target = ImageTargetWrapper(view, placeHolder)
+        }
+
+        fun intoView(view: ImageView?, placeHolder: Drawable, errorPlaceHolder: Drawable) = apply {
+            this.target = ImageTargetWrapper(view, placeHolder, errorPlaceHolder)
         }
 
         fun intoCache(callback: (success: Boolean) -> Unit = ::defaultCallback) = apply {
@@ -238,7 +242,9 @@ class ImageLoader {
     }
 
     companion object {
-        const val IMAGE_LOADER_TAG = "ImageLoader"
+        const val DEFAULT_DISK_CACHE_SIZE: Long = 1024 * 1024 * 200
+        const val DEFAULT_APP_VERSION: Int = 1
+        const val IMAGE_LOADER_TAG = "LightImageLoaderDownloader"
 
         var LOGGING_ENABLED = false
         lateinit var INSTANCE: ImageLoader

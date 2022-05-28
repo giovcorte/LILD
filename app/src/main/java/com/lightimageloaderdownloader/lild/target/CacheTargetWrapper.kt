@@ -28,7 +28,7 @@ class CacheTargetWrapper(
     }
 
     override fun onError() {
-        TODO("Not yet implemented")
+        callback(false)
     }
 
     override fun getId(): Int {

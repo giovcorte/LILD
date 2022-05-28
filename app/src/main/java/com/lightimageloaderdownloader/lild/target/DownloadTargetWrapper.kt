@@ -39,7 +39,7 @@ class DownloadTargetWrapper(
     }
 
     override fun onError() {
-
+        callback(false)
     }
 
     override fun getId(): Int {

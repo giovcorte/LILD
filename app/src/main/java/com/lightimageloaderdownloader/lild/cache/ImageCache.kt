@@ -13,9 +13,13 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-class ImageCache(context: Context) : IImageCache {
+class ImageCache(
+    context: Context,
+    diskSize: Long,
+    appVersion: Int
+) : IImageCache {
 
-    private val diskImageCache = AsyncImageDiskCache(DiskCache(File(context.cacheDir.path + File.separator + "imagescache"), 1024 * 1024 * 200, 1))
+    private val diskImageCache = AsyncImageDiskCache(DiskCache(File(context.cacheDir.path + File.separator + "imagescache"), diskSize, appVersion))
     private val memoryImageCache = ImageMemoryCache()
 
     override suspend fun get(request: Request): Bitmap? {
