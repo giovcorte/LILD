@@ -3,6 +3,8 @@ LightImageLoaderDownloader
 
 Simple but really efficient image loader and downloader, with a memory and disk cache.
 
+```kotlin
+
 ImageLoader.get().load("https://....png").intoView(imageView).run() // To load an url into an ImageView object
 
 ImageLoader.get().load(file).intoView(imageView).run() 
@@ -24,3 +26,5 @@ ImageLoader.get().load(request, fetcher).into(target).run() // To load your cust
 ImageLoader.get().cache() // To get the IImageCache instance
 
 ImageLoader.get().cache().dumps(request, file) // To save to the given file the given cached request. If you want to download a cached image knowing only the key, you can obtain a valid request object through Request.just(key)
+
+```
