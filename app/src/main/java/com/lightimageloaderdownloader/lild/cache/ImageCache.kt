@@ -2,13 +2,10 @@ package com.lightimageloaderdownloader.lild.cache
 
 import android.content.Context
 import android.graphics.Bitmap
-import com.lightimageloaderdownloader.lild.Request
-import com.lightimageloaderdownloader.lild.cache.diskcache.AsyncImageDiskCache
+import com.lightimageloaderdownloader.lild.ImageRequest
+import com.lightimageloaderdownloader.lild.cache.diskcache.ImageDiskCache
 import com.lightimageloaderdownloader.lild.cache.diskcache.DiskCache
 import com.lightimageloaderdownloader.lild.cache.memorycache.ImageMemoryCache
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -19,18 +16,18 @@ class ImageCache(
     appVersion: Int
 ) : IImageCache {
 
-    private val diskImageCache = AsyncImageDiskCache(DiskCache(File(context.cacheDir.path + File.separator + "imagescache"), diskSize, appVersion))
+    private val diskImageCache = ImageDiskCache(DiskCache(File(context.cacheDir.path + File.separator + "imagescache"), diskSize, appVersion))
     private val memoryImageCache = ImageMemoryCache()
 
-    override suspend fun get(request: Request): Bitmap? {
-        val key = request.cachingKey()
+    override fun get(imageRequest: ImageRequest<*>): Bitmap? {
+        val key = imageRequest.cachingKey
         return if (memoryImageCache.contains(key)) memoryImageCache[key] else diskImageCache.get(key)
     }
 
-    override suspend fun put(request: Request, bitmap: Bitmap) : Boolean {
-        val key = request.cachingKey()
+    override fun put(imageRequest: ImageRequest<*>, bitmap: Bitmap) : Boolean {
+        val key = imageRequest.cachingKey
         var result = true
-        when (request.cachingStrategy()) {
+        when (imageRequest.cachingStrategy) {
             IImageCache.CachingStrategy.ALL -> {
                 memoryImageCache.put(key, bitmap)
                 result = diskImageCache.put(key, bitmap)
@@ -46,22 +43,20 @@ class ImageCache(
         return result
     }
 
-    override fun contains(request: Request): Boolean {
-        val key = request.cachingKey()
+    override fun contains(imageRequest: ImageRequest<*>): Boolean {
+        val key = imageRequest.cachingKey
         return memoryImageCache.contains(key) || diskImageCache.contains(key)
     }
 
-    override suspend fun clear() {
+    override fun clear() {
         memoryImageCache.clear()
         diskImageCache.clear()
     }
 
-    override suspend fun dumps(request: Request, file: File): Boolean {
+    override fun dumps(imageRequest: ImageRequest<*>, file: File): Boolean {
         return try {
-            withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-                val bitmap = get(request)
-                writeBitmap(bitmap, file)
-            }
+            val bitmap = get(imageRequest)
+            writeBitmap(bitmap, file)
             true
         } catch (e: IOException) {
             false

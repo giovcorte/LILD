@@ -1,17 +1,16 @@
 package com.lightimageloaderdownloader.lild.fetcher
 
-import android.graphics.Bitmap
-import com.lightimageloaderdownloader.lild.ImageResult
-import com.lightimageloaderdownloader.lild.Request
+import com.lightimageloaderdownloader.lild.Result
+import com.lightimageloaderdownloader.lild.ImageRequest
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 
 class FileFetcher: ImageFetcher() {
 
-    override fun fetch(request: Request): ImageResult<Bitmap> {
+    override fun fetch(imageRequest: ImageRequest<*>): Result {
         try {
-            val inputStream = FileInputStream(File(request.asString()))
+            val inputStream = FileInputStream(File(imageRequest.asString))
             val byteArrayOutputStream = ByteArrayOutputStream()
             val buffer = ByteArray(1024)
             var len: Int
@@ -22,13 +21,13 @@ class FileFetcher: ImageFetcher() {
             inputStream.close()
             val bitmap = decodeByteArray(
                 byteArrayOutputStream.toByteArray(),
-                request.requiredSize()
+                imageRequest.requiredSize
             )
             byteArrayOutputStream.close()
 
-            return ImageResult.Success(bitmap!!)
+            return Result.BitmapData(bitmap!!)
         } catch (e: Exception) {
-            return ImageResult.Error()
+            return Result.Error()
         }
     }
 

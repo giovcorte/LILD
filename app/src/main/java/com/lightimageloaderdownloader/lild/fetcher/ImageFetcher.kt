@@ -2,15 +2,15 @@ package com.lightimageloaderdownloader.lild.fetcher
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import com.lightimageloaderdownloader.lild.Request
-import com.lightimageloaderdownloader.lild.ImageResult
+import com.lightimageloaderdownloader.lild.ImageRequest
+import com.lightimageloaderdownloader.lild.Result
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.io.InputStream
 
 abstract class ImageFetcher: Fetcher {
 
-    abstract override fun fetch(request: Request): ImageResult<Bitmap>
+    abstract override fun fetch(imageRequest: ImageRequest<*>): Result
 
     @Throws(IOException::class)
     open fun decodeByteArray(bytes: ByteArray?, requiredSize: Int): Bitmap? {
