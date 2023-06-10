@@ -1,5 +1,6 @@
 package com.lightimageloaderdownloader.lild
 
+import android.graphics.drawable.Drawable
 import com.lightimageloaderdownloader.lild.cache.IImageCache
 
 interface ImageRequest<T> {
@@ -9,7 +10,7 @@ interface ImageRequest<T> {
     val cachingStrategy: IImageCache.CachingStrategy
     val cachingKey: String
     val requiredSize: Int
-
+    val placeHolder: Drawable?
     companion object {
         @Suppress("unused")
         fun just(s: String) : ImageRequest<String> {
@@ -19,6 +20,7 @@ interface ImageRequest<T> {
                 override val cachingStrategy: IImageCache.CachingStrategy = IImageCache.CachingStrategy.ALL
                 override val cachingKey: String = s
                 override val requiredSize: Int = 300
+                override val placeHolder = null
             }
         }
     }

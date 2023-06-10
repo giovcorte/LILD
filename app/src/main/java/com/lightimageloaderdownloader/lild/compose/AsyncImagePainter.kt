@@ -36,13 +36,6 @@ class AsyncImagePainter(private val imageLoader: ImageLoader, private val imageR
             painter = value
         }
 
-    private var state: State by mutableStateOf(State.Empty)
-    private var _state: State = State.Empty
-        set(value) {
-            field = value
-            state = value
-        }
-
     override fun DrawScope.onDraw() {
         painter?.apply { draw(size) }
     }
@@ -69,6 +62,7 @@ class AsyncImagePainter(private val imageLoader: ImageLoader, private val imageR
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
         rememberScope = scope
 
+        imageRequest.placeHolder?.let { _painter = it.toPainter() }
         (_painter as? RememberObserver)?.onRemembered()
 
         scope.launch {
@@ -81,12 +75,11 @@ class AsyncImagePainter(private val imageLoader: ImageLoader, private val imageR
     }
 
     private fun updateState(input: State) {
-        val previous = _state
-        _state = input
+        val previous = _painter
         _painter = input.painter
 
-        if (rememberScope != null && previous.painter !== input.painter) {
-            (previous.painter as? RememberObserver)?.onForgotten()
+        if (rememberScope != null && previous !== input.painter) {
+            (previous as? RememberObserver)?.onForgotten()
             (input.painter as? RememberObserver)?.onRemembered()
         }
 
