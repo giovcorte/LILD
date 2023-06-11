@@ -6,6 +6,10 @@ plugins {
 android {
     compileSdk 33
 
+    android {
+        namespace 'com.lightimageloaderdownloader.lild'
+    }
+
     defaultConfig {
         minSdk 26
         targetSdk 33
@@ -13,10 +17,6 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildFeatures {
-        compose true
     }
 
     buildFeatures {

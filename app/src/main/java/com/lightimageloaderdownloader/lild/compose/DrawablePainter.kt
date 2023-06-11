@@ -1,6 +1,7 @@
 package com.lightimageloaderdownloader.lild.compose
 
 import android.graphics.drawable.Animatable
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
@@ -11,9 +12,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asAndroidColorFilter
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.withSave
 import kotlin.math.roundToInt
@@ -93,10 +96,17 @@ private val MAIN_HANDLER by lazy(LazyThreadSafetyMode.NONE) {
     Handler(Looper.getMainLooper())
 }
 
-private val Drawable.intrinsicSize: Size
+val Drawable.intrinsicSize: Size
     get() = when {
         intrinsicWidth >= 0 && intrinsicHeight >= 0 -> {
             Size(width = intrinsicWidth.toFloat(), height = intrinsicHeight.toFloat())
         }
         else -> Size.Unspecified
     }
+
+fun Drawable?.toPainter() = when {
+    this == null -> EmptyPainter()
+    this is BitmapDrawable -> BitmapPainter(bitmap.asImageBitmap())
+    else -> DrawablePainter(mutate())
+}
+

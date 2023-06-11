@@ -20,7 +20,7 @@ class ResourceFetcher(private val context: Context): ImageFetcher() {
             val drawable = ResourcesCompat.getDrawable(context.resources, resource, null)
             return Result.DrawableData(drawable!!)
         } catch (e: Exception) {
-            return Result.Error()
+            return Result.Error
         }
     }
 }

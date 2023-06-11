@@ -14,7 +14,7 @@ import com.lightimageloaderdownloader.lild.ImageRequest
 @Composable
 fun AsyncImage(
     imageLoader: ImageLoader,
-    imageRequest: ImageRequest<Any>,
+    imageRequest: ImageRequest<*>,
     contentDescription: String?,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,

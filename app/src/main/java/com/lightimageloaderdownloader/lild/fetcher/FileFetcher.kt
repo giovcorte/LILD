@@ -27,7 +27,7 @@ class FileFetcher: ImageFetcher() {
 
             return Result.BitmapData(bitmap!!)
         } catch (e: Exception) {
-            return Result.Error()
+            return Result.Error
         }
     }
 
