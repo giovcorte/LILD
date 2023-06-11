@@ -1,30 +1,26 @@
 # LILD
 LightImageLoaderDownloader
 
-Simple but really efficient image loader and downloader, with a memory and disk cache.
+Simple and ultra-light weight image loader for Views and Compose! Caching both on disk and memory, and ability to transfer cached images on files to save them. Supports loading of urls, files and res ids.
 
 ```kotlin
 
-ImageLoader.get().load("https://....png").intoView(imageView).run() // To load an url into an ImageView object
+imageLoader = ImageLoader(applicationContext)
+request =  ImageRequestBuilder("https://cdn.britannica.com/85/235885-050-C8CC6D8B/Samoyed-dog-standing-snow.jpg")
+                .placeHolder(getDrawable(R.drawable.ic_launcher_foreground)!!)
+                .build()
+// inside composable function
+AsyncImage(
+   imageLoader,
+   request,
+   modifier = Modifier
+       .clip(shape = CircleShape)
+       .size(size = 62.dp),
+   contentDescription = "lucy pic",
+   contentScale = ContentScale.Crop
+)
 
-ImageLoader.get().load(file).intoView(imageView).run() 
-
-ImageLoader.get().load(R.drawable.image).intoView(imageView).run()
-
-ImageLoader.get().cache(cacheStrategy).load("https://....png").intoView(imageView).run() // To specify the caching strategy from IImageCache.ImageStrategy
-
-ImageLoader.get().tag(customCacheTag).load("https://....png").intoView(imageView).run()
-
-ImageLoader.get().load("https://....png").intoView(imageView, progressDrawable, errorDrawable).run() // progress and error drawables are not mandatory
-
-ImageLoader.get().load("https://....png").intoCache().run() // To warm up the cache
-
-ImageLoader.get().load("https://....png").intoFile(file).run() // To download the image to the given file
-
-ImageLoader.get().load(request, fetcher).into(target).run() // To load your custom implementatios 
-
-ImageLoader.get().cache() // To get the IImageCache instance
-
-ImageLoader.get().cache().dumps(request, file) // To save to the given file the given cached request. If you want to download a cached image knowing only the key, you can obtain a valid request object through Request.just(key)
+// for views
+imageLoader.load(request, imageView)
 
 ```
